@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  rstudio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - "8787:8787"
+    volumes:
+      - .:/app/
+    environment:
+      PYTHONUNBUFFERED: 1
+    entrypoint: [ "python3", "/app/Frog.py" ]
