@@ -1,6 +1,5 @@
 import re
 import os
-from tqdm.auto import tqdm
 from frog import Frog, FrogOptions
 
 frog = Frog(FrogOptions(morph=False, mwu=False, chunking=False, ner=False))
