@@ -43,9 +43,10 @@ if __name__ == '__main__':
     # loop through directory (corpus)
     for index, file in enumerate(files):
         filename = os.fsdecode(file)
-        print(f"{index + 1}/{num_files} - {filename}")
+        #print(f"{index + 1}/{num_files} - {filename}")
         try:
-            if filename.endswith(".txt"):
+            if filename.startswith("SPI")
+            #if filename.endswith(".txt"):
                 # process the files here:
                 parse(filename)
         except:
