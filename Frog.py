@@ -5,7 +5,7 @@ from frog import Frog, FrogOptions
 
 frog = Frog(FrogOptions(morph=False, mwu=False, chunking=False, ner=False))
 
-corpus_dir = "Corpus/Normalized/"
+corpus_dir = "Corpus/Retagging/"
 
 def parse(filename):
     filename_corpus = f"{corpus_dir}{filename}"
@@ -21,15 +21,24 @@ def parse(filename):
             output = frog.process(clean_line)   # make predictions based on cleaned_line
             new_line = ""
             for item in output:
-                # words with FL tag
-                if "__FL__" in item['text']:
-                    new_line = new_line + item["text"] + " "
-                # other words
-                else:
-                    new_line = new_line + item["text"] + "[" + item['lemma'] + ", " + item['pos'] + ", " + str(item['posprob']) + "] "
+                try:
+                    # words with FL tag
+                    if "__FL__" in item['text']:
+                        new_line = new_line + item["text"] + " "
+                    # other words
+                    else:
+                        new_line = new_line + item["text"] + "[" + item['lemma'] + ", " + item['pos'] + ", " + str(item['posprob']) + "] "
+                except:
+                    print("error: " + str(line) + ": " + str(item))
             for pair in normalized_words:
-                new_line = re.sub(pair[1] + r'(?=\[)', pair[0], new_line, 1)
-            x.append(tag.group(0) + new_line.rstrip() + "<\sentence>")
+                try:
+                    new_line = re.sub(pair[1] + r'(?=\[)', pair[0], new_line, 1)
+                except:
+                    print("error: " + str(line) + ": " + str(pair))
+            try:
+                x.append(tag.group(0) + new_line.rstrip() + "<\sentence>")
+            except:
+                print(str(line))
     with open(f"Corpus/FrogTagged/{filename}", "w", encoding="utf8") as f1:
         f1.write('\n'.join(x))
 
@@ -43,9 +52,8 @@ if __name__ == '__main__':
     # loop through directory (corpus)
     for index, file in enumerate(files):
         filename = os.fsdecode(file)
-        #print(f"{index + 1}/{num_files} - {filename}")
         try:
-            if filename.startswith("SPI")
+            if filename.endswith(".txt"):
             #if filename.endswith(".txt"):
                 # process the files here:
                 parse(filename)
